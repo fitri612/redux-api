@@ -1,5 +1,4 @@
-import { LoadingBar } from 'react-redux-loading-bar';
-import './App.css';
+import './bootstrap.min.css';
 import CommentList from './features/comments/CommentList';
 
 function App() {

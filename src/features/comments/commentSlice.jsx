@@ -1,18 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const API = "https://jsonplaceholder.typicode.com/comments";
 
 const initialState = {
   entities: [],
   loading: false,
-  success: false,
-  error: null,
 };
 
-
 export const fetchComments = createAsyncThunk(
-  'comments/fetchComment',
+  "comments/fetchComment",
   async () => {
     const response = await axios.get(API);
     return response.data;
@@ -25,18 +23,32 @@ const commentSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchComments.pending, (state, action) => {
-      ;(state.pending = true),
-        (state.success = false),
-        (state.error = null);
+      state.loading = true;
     });
     builder.addCase(fetchComments.fulfilled, (state, action) => {
-      ;(state.pending = false),
-        (state.success = true),
-        (state.entities = action.payload);
+      state.entities = action.payload;
+      state.loading = false;
+      toast.success("Success!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     });
     builder.addCase(fetchComments.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      toast.error('Error !', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        });
     });
   },
 });
